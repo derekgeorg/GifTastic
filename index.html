@@ -8,19 +8,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="assets/style.css">
     <script src="assets/app.js"></script>
-
-
 </head>
-<body>
-    <div id="button_container">
-        <button search-topic="parents">Parents</button>
-        <button search-topic="kids">Kids</button>
-        <button search-topic="moms">Moms</button>
-
-    </div>
-    <div id="gif_container">
-
-    </div>
-    
-</body>
+    <body>
+        <div class="container">
+            <!-- Buttons go here -->
+            <div id="button_container"></div>
+            
+                <!--Add gif box-->
+                <form id="gif-form">
+                    <label for="gif-input">Add a famly member!</label>
+                    <input type="text" id="gif-input"><br>        
+        
+                <!-- Add Family Member button-->
+                    <input id="add-gif" type="submit" value="Add a family member!">    
+                </form>
+                <div id="gif-view"></div>
+            </div>
+        </div>
+     </body>
 </html>

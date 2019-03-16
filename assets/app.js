@@ -9,53 +9,78 @@
 //create form field and submit button to add button topic to top
 
 $(document).ready(function(){
-    // var topics = ["Parents", "Kids", "Moms", "Dads", "Children", "Parenting", "Family", "Toddlers", "Babies"];
+    // Array of search strings
+    var topics = ["Parents", "Kids", "Moms", "Dads", "Children", "Parenting", "Family", "Toddlers", "Babies"];
     
+    //First function: display search strings
+    function displayGifName() {
+        var gifName = $(this).attr("gif-name");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topics + "&limit=10&api_key=5y6lpS2mVK3JdNkQemlNS4CQenUvTsjK";
 
-    // function makeButtons() {
-    //     for(var i=0; i < makeButtons.length; i++){
-    //         $("<button>").text(topic[i]);
-    //     }
-    // }
-    $("button").on("click", function() {
-        var topics = $(this).attr("search-topic");
-    
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-    topics + "&limit=10&api_key=5y6lpS2mVK3JdNkQemlNS4CQenUvTsjK";
-    
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
+       // Create AJAX call for button being clicked
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response) {
 
-        .then(function(response) {
-        console.log(queryURL);
-        console.log(response);
+            console.log(response)
 
-        var results = response.data;
+        // Create gif div
+        var gifDiv = $("div class='gif'>");
 
-        for (var i=0; i < results.length; i++) {
-            var searchDiv = $("<div>");
-            var p = $("<p>").text("Rating:" + results[i].data.rating);
-            var topicImage = $("<img>");
-            topicImage.attr("src", results[i].data.images.fixed_width_still);
+        //store the rating
+        var rating = response.rating;
+
+        //element to have display rating
+        var rateGif = $("<p>").text("Rating: " + rating);
+
+        //dispay rating
+        gifDiv.append(rateGif);
+
+        //retrieve still shot url
+        var stillGif = response.data.images.fixed_height_still;
+
+        //create element to hold still shot
+        var stillFrame = $("<div class = freezeFrame>");
+
+        //retrieve animated gif url
+        var animatedGif = response.data.url;
+
+        //create element to hold animated gif
+        var animatedFrame = $("<div class = frame");
+
+        //append still image 
+        gifDiv.append(stillFrame);
         
-            searchDiv.append(p);
-            searchDiv.append(topicImage);
-            $("#gif_container").prepend(searchDiv);
-        
+    
+        $("#gif-view").prepend(gifDiv);       
+});
+    }
+// Second function make buttons    
+function makeButtons() {
+        $("#button_container").empty();
+        for(var i = 0; i < topics.length; i++){
+            var p = $("<button>");
+            // add attributes. reference movie-button-layout-solved.
+            p.addClass("gif-btn");
+            p.attr("gif-name", topics[i]);
+            p.text(topics[i]);
+            $("#button_container").append(p);
         }
-    }) 
-    });
-    
-   
+    }
 
+    $("#add-gif").on("click", function(event) {
+        event.preventDefault();
+        // grabs the input from text box
+        var gify = $("#gif-input").val().trim();
 
+        topics.push(gify);
 
+        makeButtons();
+    });    
+// click event listener to all elemtns w/ class of "gif-btn"
+$(document).on("click", ".gif-btn", displayGifName);
 
-
-
-
+makeButtons();
 
 });
-
