@@ -13,9 +13,12 @@ $(document).ready(function(){
     var topics = ["Parents", "Kids", "Moms", "Dads", "Children", "Parenting", "Family", "Toddlers", "Babies"];
     
     //First function: display search strings
-    function displayGifName() {
+    function gifDisplay(value) {
+        // for(var i = 0; i < topics.length; i++){
+
         var gifName = $(this).attr("gif-name");
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topics + "&limit=10&api_key=5y6lpS2mVK3JdNkQemlNS4CQenUvTsjK";
+        
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + value + "&limit=10&api_key=5y6lpS2mVK3JdNkQemlNS4CQenUvTsjK";
 
        // Create AJAX call for button being clicked
         $.ajax({
@@ -25,11 +28,13 @@ $(document).ready(function(){
 
             console.log(response)
 
+        var newResponse = response.data;
+
         // Create gif div
-        var gifDiv = $("div class='gif'>");
+        var gifDiv = $("<div class='gif'>");
 
         //store the rating
-        var rating = response.rating;
+        var rating = response.data.rating;
 
         //element to have display rating
         var rateGif = $("<p>").text("Rating: " + rating);
@@ -38,7 +43,7 @@ $(document).ready(function(){
         gifDiv.append(rateGif);
 
         //retrieve still shot url
-        var stillGif = response.data.images.fixed_height_still;
+        var stillGif = response.data[0].images.fixed_height_still;
 
         //create element to hold still shot
         var stillFrame = $("<div class = freezeFrame>");
@@ -79,7 +84,10 @@ function makeButtons() {
         makeButtons();
     });    
 // click event listener to all elemtns w/ class of "gif-btn"
-$(document).on("click", ".gif-btn", displayGifName);
+$(document).on("click", ".gif-btn", function(){
+    var value = $(this).attr("gif-name");
+    gifDisplay(value);
+});
 
 makeButtons();
 
